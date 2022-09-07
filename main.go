@@ -19,11 +19,11 @@ func main() {
 	defer db.Close()
 	//
 
-	sqlStatement := "SELECT \"productId\", \"productGender\" FROM products LIMIT 1"
+	sqlStatement := "SELECT \"productId\", \"productGender\" FROM products WHERE \"productId\" = $1"
 	var productId string
 	var gender uint8
 
-	row := db.QueryRow(sqlStatement)
+	row := db.QueryRow(sqlStatement, "00033e9a-77f6-4b81-a03a-ae7c00b611cd")
 	err := row.Scan(&productId, &gender)
 	switch err {
 	case sql.ErrNoRows:
