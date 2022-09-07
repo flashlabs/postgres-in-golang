@@ -17,22 +17,37 @@ const (
 func main() {
 	db := initDatabase()
 	defer db.Close()
+
+	sqlStatement := "SELECT \"productId\", \"productGender\" FROM products LIMIT $1"
+
 	//
-
-	sqlStatement := "SELECT \"productId\", \"productGender\" FROM products WHERE \"productId\" = $1"
-	var productId string
-	var gender uint8
-
-	row := db.QueryRow(sqlStatement, "00033e9a-77f6-4b81-a03a-ae7c00b611cd")
-	err := row.Scan(&productId, &gender)
-	switch err {
-	case sql.ErrNoRows:
-		fmt.Println("No rows returned!")
-	case nil:
-		fmt.Println(productId, gender)
-	default:
+	rows, err := db.Query(sqlStatement, 3)
+	if err != nil {
 		panic(err)
 	}
+	defer rows.Close()
+
+	type Product struct {
+		ProductId string
+		Gender    int
+	}
+
+	for rows.Next() {
+		product := Product{}
+
+		err = rows.Scan(&product.ProductId, &product.Gender)
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println(product)
+	}
+
+	err = rows.Err()
+	if err != nil {
+		panic(err)
+	}
+
 }
 
 func initDatabase() *sql.DB {
