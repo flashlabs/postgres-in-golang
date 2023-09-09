@@ -1,6 +1,14 @@
-# postgres-in-golang
+# Postgres in Go
 
-## Agenda
+## What's this
+
+This is the simplest possible example of using postgres in Golang.
+
+I used it for myself as a base for a tech talk.
+
+Check different branches, for an incremental showcase.
+
+## Branches
 
 - Connecting to the database:
   - download/sql
